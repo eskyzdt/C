@@ -5,6 +5,9 @@
 
 int array[MAXSIZE] = {23, 123, 554, 678, 9, 34, 237, 56678, 345, 10};
 
+/**
+ * *DListPoint 定义一个DNode结构的指针
+ */
 typedef struct DNode {
     int data;
     struct DNode *prior, *next
@@ -39,6 +42,8 @@ void printAll(DNode *list) {
 // 头插法建立
 // todo 暂时不懂的问题:
 // 这里不用返回值来获取的话, 子函数修改后的内容到了main函数中直接就失效了
+// todo 暂时的理解
+// 因为:在main函数中声明的是静态内存分配, 静态内存分配是分配在栈中的,而malloc是在堆内存中动态内存分配,
 DListPoint initList(DListPoint list) {
     // 头结点
     list = (DListPoint) malloc(sizeof(DNode));
@@ -137,6 +142,30 @@ int length(DNode list) {
     return i;
 }
 
+void deleteElem(DListPoint list, int i) {
+    // 先找到第三个地址
+    DListPoint del = getElem(*list, i);
+    // 让前一个元素直接指向下一个
+    del->prior->next = del->next;
+    del->next->prior = del->prior;
+    free(del);
+}
+
+/**
+ *
+ * @param list 待插入链表
+ * @param addr 需要被插入这个结点之后
+ * @param var 需要被插入的值
+ */
+void insertElem(DListPoint addr, int var) {
+    DListPoint node = (DListPoint) malloc(sizeof(DListPoint));
+    node->data = var;
+    node->next = addr->next;
+    node->prior = addr;
+    node->next->prior = node;
+    addr->next = node;
+}
+
 // main
 void main() {
     // 这样声明之后是在栈内存中
@@ -145,9 +174,29 @@ void main() {
     printAll(list);
     // initListEnd(&list);
     DListPoint node = getElem(*list, 3);
-    printf("第三个数的值是%d", node->data);
+    printf("第三个数的值是%d\n", node->data);
 
     int length2 = length(*list);
-    printf("length is%d", length2);
+    printf("length is%d\n", length2);
+
+    DListPoint elemAddr = locateElem(*list, 678);
+    printf("地址为%p", elemAddr);
+
+    // 在elemAddr的位置之后插入一个
+    insertElem(elemAddr, 999);
+    printAll(list);
+// 空间分配:
+    // 顺序存储: 静态分配的时候, 如果空间已经满了,那么再插入数据会报错, 所以要分配一个合适大小的空间
+    // 但是如果分配的过大会造成空间的浪费, 分配的过小又会内存溢出.
+    // 如果是动态分配, 在空间满的时候需要移动大量的元素, 导致操作效率降低, 而且若内存中没有更大的连续存储空间,会导致分配失败.
+    // 链式存储: 需要的时候分配内存空间即可, 只要内存还有空间, 就可以分配, 操作灵活高效
+    // 删除第三个
+
+    // 选择的标准: 1.基于存储的考虑, 如果预先大概知道需要的存储空间, 那么就可以用顺序存储, 如果不知道, 就用链式存储
+    //          2. 基于数据结构的考虑,所有高级语言都有数组结构, 该数据结构比较简单, 而链表的数据结构要稍复杂
+    //          3. 基于运算的考虑, 如果增加和删除操作多, 用链表, 如果查询的操作多,用顺序表
+    deleteElem(list, 3);
+    printAll(list);
+
 }
 

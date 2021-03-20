@@ -13,13 +13,13 @@
 // 这里array数组是9个数,而maxsize为10, 我在做循环的时候, 少的那一个会自动置为0
 int array[MAXSIZE] = {23, 123, 554, 678, 9, 34, 237, 56678, 345};
 
-typedef struct linkList {
+typedef struct {
     int var;
     struct linkList *next;
 } linkList;
 
 // 头插法初始化链表
-linkList InitListFront(struct linkList *list) {
+linkList InitListFront(linkList *list) {
     // printf("%d\n", sizeof(struct linkList));  16
     //  printf("%d\n", sizeof(int));  4
     // 这里分配头结点
