@@ -13,7 +13,7 @@
 // 这里array数组是9个数,而maxsize为10, 我在做循环的时候, 少的那一个会自动置为0
 int array[MAXSIZE] = {23, 123, 554, 678, 9, 34, 237, 56678, 345};
 
-typedef struct {
+typedef struct linkList {
     int var;
     struct linkList *next;
 } linkList;

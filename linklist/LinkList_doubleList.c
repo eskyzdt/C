@@ -14,7 +14,7 @@ typedef struct DNode {
 } DNode, *DListPoint;
 
 // 带头结点的打印
-void printAll(DNode *list) {
+void printAll(DListPoint list) {
     DListPoint headPoint = list;
     // 如果头结点的指针不为null, 则找第一个结点的指针
     printf("该链表所有的值是:");
@@ -44,6 +44,10 @@ void printAll(DNode *list) {
 // 这里不用返回值来获取的话, 子函数修改后的内容到了main函数中直接就失效了
 // todo 暂时的理解
 // 因为:在main函数中声明的是静态内存分配, 静态内存分配是分配在栈中的,而malloc是在堆内存中动态内存分配,
+
+// 上面的暂时理解是正确的, 除此之外, 用void返回也行, 但是得首先在main函数中使用malloc分配一个空间给数据结构
+// 这样的话, 在子函数中对其的修改就可以生效了, 参见LineList_LinkList_delete.c 中的init()
+
 DListPoint initList(DListPoint list) {
     // 头结点
     list = (DListPoint) malloc(sizeof(DNode));
